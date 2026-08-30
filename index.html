@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Salina — Ementa</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,wght@0,300;0,400;1,300&family=Archivo:wght@300;400&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:   #0D1E24;
+      --gold: #C49A6C;
+      --salt: #F0EAE0;
+      --mist: #9BADA8;
+      --sand: #5C6B67;
+      --line: #1E3D48;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--salt);
+      font-family: 'Archivo', sans-serif;
+      font-weight: 300;
+      min-height: 100vh;
+    }
+
+    /* ── HEADER ── */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem 2rem 1.5rem;
+      border-bottom: 1px solid var(--line);
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .header-left { display: flex; flex-direction: column; gap: 0.25rem; }
+
+    .logo {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      font-weight: 300;
+      letter-spacing: 0.1em;
+      color: var(--salt);
+    }
+
+    .tagline {
+      font-size: 0.65rem;
+      letter-spacing: 0.25em;
+      color: var(--gold);
+      text-transform: uppercase;
+    }
+
+    /* ── LANGUAGE SWITCHER ── */
+    .lang-switcher {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+    }
+
+    .lang-btn {
+      background: none;
+      border: 1px solid var(--line);
+      color: var(--mist);
+      font-family: 'Archivo', sans-serif;
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      padding: 0.35rem 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-radius: 2px;
+    }
+
+    .lang-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .lang-btn.active { border-color: var(--gold); color: var(--gold); background: rgba(196,154,108,0.08); }
+
+    /* ── MAIN ── */
+    main { max-width: 720px; margin: 0 auto; padding: 2rem 1.5rem 4rem; }
+
+    .menu-note {
+      font-size: 0.75rem;
+      color: var(--mist);
+      letter-spacing: 0.05em;
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    /* ── SECTION ── */
+    .menu-section { margin-bottom: 3rem; }
+
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .section-bar {
+      width: 2px;
+      height: 1.4em;
+      background: var(--gold);
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .section-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 300;
+      color: var(--salt);
+    }
+
+    .section-type {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--mist);
+      text-transform: uppercase;
+    }
+
+    /* ── DISH ── */
+    .dish {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 0.25rem 1.5rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .dish:last-child { border-bottom: none; }
+
+    .dish-name {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      font-weight: 400;
+      color: var(--salt);
+      grid-column: 1;
+    }
+
+    .dish-price {
+      font-family: 'Fraunces', serif;
+      font-size: 1rem;
+      color: var(--gold);
+      grid-column: 2;
+      grid-row: 1;
+      white-space: nowrap;
+    }
+
+    .dish-desc {
+      font-size: 0.8rem;
+      color: var(--mist);
+      line-height: 1.6;
+      grid-column: 1 / -1;
+    }
+
+    .dish-allergens {
+      font-size: 0.7rem;
+      color: var(--sand);
+      grid-column: 1 / -1;
+      margin-top: 0.1rem;
+    }
+
+    /* ── DIVIDER ── */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin: 3rem 0;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+    .divider-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+
+    /* ── QR ── */
+    .qr-section {
+      text-align: center;
+      padding: 2.5rem 1.5rem;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      margin-top: 3rem;
+    }
+
+    .qr-label {
+      font-size: 0.65rem;
+      letter-spacing: 0.2em;
+      color: var(--gold);
+      text-transform: uppercase;
+      margin-bottom: 1.25rem;
+    }
+
+    #qr-code {
+      display: inline-block;
+      padding: 12px;
+      background: var(--salt);
+      border-radius: 4px;
+      margin-bottom: 1rem;
+    }
+
+    #qr-code canvas { display: block; }
+
+    .qr-sub {
+      font-size: 0.72rem;
+      color: var(--mist);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--line);
+      font-size: 0.72rem;
+      color: var(--sand);
+      line-height: 2;
+    }
+
+    /* ── LOADING ── */
+    .loading {
+      text-align: center;
+      padding: 4rem 2rem;
+      color: var(--mist);
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+    }
+
+    @media (max-width: 480px) {
+      header { padding: 1.5rem 1.25rem 1rem; }
+      main { padding: 1.5rem 1.25rem 3rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <span class="logo">Salina</span>
+    <span class="tagline" data-i18n="tagline">Cozinha de Autor · Aveiro</span>
+  </div>
+  <div class="lang-switcher">
+    <button class="lang-btn active" onclick="setLang('pt')">PT</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  </div>
+</header>
+
+<main>
+  <p class="menu-note" data-i18n="note">O menu varia com a época e a disponibilidade dos produtores.</p>
+  <div id="menu-container"><div class="loading" data-i18n="loading">A carregar…</div></div>
+
+  <div class="divider"><div class="divider-dot"></div></div>
+
+  <div class="qr-section">
+    <p class="qr-label" data-i18n="qr-label">Ementa digital</p>
+    <div id="qr-code"></div>
+    <p class="qr-sub" data-i18n="qr-sub">Aponte a câmara para aceder a esta ementa</p>
+  </div>
+</main>
+
+<footer>
+  Rua das Salinas, 12 · 3800-001 Aveiro · Portugal<br>
+  +351 234 000 000 · reservas@salina-aveiro.pt<br>
+  <span data-i18n="hours">Quarta a domingo · Jantar · Reserva obrigatória</span>
+</footer>
+
+<script>
+  // ── TRADUÇÕES DA INTERFACE ──
+  const UI = {
+    pt: {
+      tagline: 'Cozinha de Autor · Aveiro',
+      note: 'O menu varia com a época e a disponibilidade dos produtores.',
+      loading: 'A carregar…',
+      'qr-label': 'Ementa digital',
+      'qr-sub': 'Aponte a câmara para aceder a esta ementa',
+      hours: 'Quarta a domingo · Jantar · Reserva obrigatória',
+      allergens: 'Alérgenos',
+    },
+    en: {
+      tagline: 'Signature Cuisine · Aveiro',
+      note: 'The menu changes with the season and the availability of our producers.',
+      loading: 'Loading…',
+      'qr-label': 'Digital menu',
+      'qr-sub': 'Point your camera to access this menu',
+      hours: 'Wednesday to Sunday · Dinner · Reservation required',
+      allergens: 'Allergens',
+    },
+    fr: {
+      tagline: 'Cuisine d\'Auteur · Aveiro',
+      note: 'Le menu varie selon la saison et la disponibilité des producteurs.',
+      loading: 'Chargement…',
+      'qr-label': 'Menu numérique',
+      'qr-sub': 'Pointez votre appareil photo pour accéder à ce menu',
+      hours: 'Mercredi au dimanche · Dîner · Réservation obligatoire',
+      allergens: 'Allergènes',
+    },
+  };
+
+  // ── GOOGLE SHEETS ──
+  const SHEET_ID   = '19x9XPsjtSHJztBCHZ9JMKLoQV1_rXts1QK5sNqP4Zv8';
+  const EMENTA_GID = '1'; // ID da aba "ementa" — actualizar depois de criar a aba
+  const CSV_URL    = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${EMENTA_GID}`;
+
+  // Fallback com traduções
+  const fallback = [
+    {
+      id: 'ria',
+      nome:   { pt: 'Ria', en: 'Estuary', fr: 'Ria' },
+      tipo:   { pt: 'Entradas', en: 'Starters', fr: 'Entrées' },
+      pratos: [
+        {
+          nome:      { pt: 'Ostra do Canal de Mira', en: 'Mira Channel Oyster', fr: 'Huître du Canal de Mira' },
+          descricao: { pt: 'Ostra viva, ponzu de algas codium, óleo de estragão, flor de sal de Aveiro.', en: 'Live oyster, codium seaweed ponzu, tarragon oil, Aveiro fleur de sel.', fr: 'Huître vivante, ponzu d\'algues codium, huile d\'estragon, fleur de sel d\'Aveiro.' },
+          alergénios: 'Moluscos / Molluscs / Mollusques',
+          preco: '18 €',
+        },
+        {
+          nome:      { pt: 'Enguia defumada', en: 'Smoked Eel', fr: 'Anguille fumée' },
+          descricao: { pt: 'Enguia da ria defumada a frio, pepino em pickle, emulsão de manteiga noisette, alcaparras.', en: 'Cold-smoked estuary eel, pickled cucumber, noisette butter emulsion, capers.', fr: 'Anguille de ria fumée à froid, concombre en pickles, émulsion beurre noisette, câpres.' },
+          alergénios: 'Peixe, lacticínios / Fish, dairy / Poisson, laitages',
+          preco: '22 €',
+        },
+        {
+          nome:      { pt: 'Percebes', en: 'Goose Barnacles', fr: 'Pouces-pieds' },
+          descricao: { pt: 'Percebes cozidos em água do mar, gel de limão-galego, pó de estragão, areia de pão torrado.', en: 'Barnacles cooked in seawater, galangal lemon gel, tarragon powder, toasted bread sand.', fr: 'Pouces-pieds cuits en eau de mer, gel de citron-galanga, poudre d\'estragon, sable de pain grillé.' },
+          alergénios: 'Crustáceos, glúten / Crustaceans, gluten / Crustacés, gluten',
+          preco: '26 €',
+        },
+      ],
+    },
+    {
+      id: 'terra',
+      nome:   { pt: 'Terra', en: 'Land', fr: 'Terre' },
+      tipo:   { pt: 'Pratos principais', en: 'Main courses', fr: 'Plats principaux' },
+      pratos: [
+        {
+          nome:      { pt: 'Sável do Vouga grelhado', en: 'Grilled Vouga Shad', fr: 'Alose du Vouga grillée' },
+          descricao: { pt: 'Sável de temporada, ervilhas novas do baixo Mondego, molho de carcaças tostadas, trigo sarraceno inflado.', en: 'Seasonal shad, young peas from the lower Mondego, roasted carcass sauce, puffed buckwheat.', fr: 'Alose de saison, petits pois nouveaux du bas Mondego, jus de carcasses rôties, sarrasin soufflé.' },
+          alergénios: 'Peixe, glúten / Fish, gluten / Poisson, gluten',
+          preco: '34 €',
+        },
+        {
+          nome:      { pt: 'Bacalhau à lagareiro', en: 'Lagareiro Codfish', fr: 'Morue à la lagareiro' },
+          descricao: { pt: 'Lombo de bacalhau da Islândia, batata nova confitada, oliva negra desidratada, coentros, azeite de primeira pressão.', en: 'Icelandic codfish loin, confit new potato, dehydrated black olive, coriander, extra-virgin olive oil.', fr: 'Longe de morue d\'Islande, pomme de terre nouvelle confite, olive noire déshydratée, coriandre, huile d\'olive première pression.' },
+          alergénios: 'Peixe / Fish / Poisson',
+          preco: '32 €',
+        },
+        {
+          nome:      { pt: 'Borrego do baixo Mondego', en: 'Lower Mondego Lamb', fr: 'Agneau du bas Mondego' },
+          descricao: { pt: 'Costeleta de borrego, cenoura roxa assada em crosta de sal, jus de osso com alecrim, puré de raiz de aipo.', en: 'Lamb chop, purple carrot roasted in salt crust, rosemary bone jus, celeriac purée.', fr: 'Côtelette d\'agneau, carotte violette rôtie en croûte de sel, jus d\'os au romarin, purée de céleri-rave.' },
+          alergénios: 'Lacticínios / Dairy / Laitages',
+          preco: '38 €',
+        },
+      ],
+    },
+    {
+      id: 'sal',
+      nome:   { pt: 'Sal', en: 'Salt', fr: 'Sel' },
+      tipo:   { pt: 'Sobremesas', en: 'Desserts', fr: 'Desserts' },
+      pratos: [
+        {
+          nome:      { pt: 'Ovos moles reinterpretados', en: 'Reinterpreted Ovos Moles', fr: 'Ovos moles réinterprétés' },
+          descricao: { pt: 'Gema curada em açúcar, creme de natas da região, tuile de arroz, flor de sal de Aveiro.', en: 'Sugar-cured egg yolk, local cream, rice tuile, Aveiro fleur de sel.', fr: 'Jaune d\'œuf confit au sucre, crème de la région, tuile de riz, fleur de sel d\'Aveiro.' },
+          alergénios: 'Ovos, lacticínios, glúten / Eggs, dairy, gluten / Œufs, laitages, gluten',
+          preco: '12 €',
+        },
+        {
+          nome:      { pt: 'Queijo de Azeitão', en: 'Azeitão Cheese', fr: 'Fromage d\'Azeitão' },
+          descricao: { pt: 'Queijo DOP, mel de urze do Caramulo, noz tostada, fatias de pão de centeio.', en: 'PDO cheese, Caramulo heather honey, toasted walnut, rye bread slices.', fr: 'Fromage AOP, miel de bruyère du Caramulo, noix grillée, tranches de pain de seigle.' },
+          alergénios: 'Lacticínios, frutos de casca rija, glúten / Dairy, nuts, gluten / Laitages, fruits à coque, gluten',
+          preco: '14 €',
+        },
+        {
+          nome:      { pt: 'Gelado de flor de sal', en: 'Fleur de Sel Ice Cream', fr: 'Glace à la fleur de sel' },
+          descricao: { pt: 'Gelado de leite com flor de sal de Aveiro, caramelo de algas nori, chips de gengibre cristalizado.', en: 'Milk ice cream with Aveiro fleur de sel, nori seaweed caramel, crystallised ginger chips.', fr: 'Glace au lait avec fleur de sel d\'Aveiro, caramel aux algues nori, chips de gingembre cristallisé.' },
+          alergénios: 'Lacticínios / Dairy / Laitages',
+          preco: '10 €',
+        },
+      ],
+    },
+  ];
+
+  // ── ESTADO ──
+  let currentLang = 'pt';
+  let menuData    = null;
+
+  // ── IDIOMA ──
+  function setLang(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+
+    // Botões
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.textContent === lang.toUpperCase());
+    });
+
+    // Textos de UI
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.dataset.i18n;
+      if (UI[lang][key]) el.textContent = UI[lang][key];
+    });
+
+    // Re-renderiza o menu
+    if (menuData) renderMenu(menuData);
+  }
+
+  // ── RENDERIZAÇÃO ──
+  function renderMenu(data) {
+    const lang = currentLang;
+    const container = document.getElementById('menu-container');
+
+    container.innerHTML = data.map((section, i) => `
+      ${i > 0 ? '<div class="divider"><div class="divider-dot"></div></div>' : ''}
+      <div class="menu-section">
+        <div class="section-header">
+          <div class="section-bar"></div>
+          <span class="section-name">${section.nome[lang] || section.nome.pt}</span>
+          <span class="section-type">${section.tipo[lang] || section.tipo.pt}</span>
+        </div>
+        ${section.pratos.map(dish => `
+          <div class="dish">
+            <span class="dish-name">${dish.nome[lang] || dish.nome.pt}</span>
+            <span class="dish-price">${dish.preco}</span>
+            <p class="dish-desc">${dish.descricao[lang] || dish.descricao.pt}</p>
+            <p class="dish-allergens">${UI[lang].allergens}: ${dish.alergénios}</p>
+          </div>
+        `).join('')}
+      </div>
+    `).join('');
+  }
+
+  // ── PARSE CSV DO GOOGLE SHEETS ──
+  // Colunas esperadas na aba "ementa":
+  // seccao | nome_pt | nome_en | nome_fr | tipo_pt | tipo_en | tipo_fr |
+  // prato_pt | prato_en | prato_fr | desc_pt | desc_en | desc_fr | alergénios | preco
+  function parseCSV(text) {
+    const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
+    if (lines.length < 2) return null;
+
+    const header = lines[0].replace(/^﻿/, '').split(',').map(h => h.trim().toLowerCase());
+    const col = name => header.indexOf(name);
+
+    const required = ['seccao', 'prato_pt', 'desc_pt', 'preco'];
+    if (required.some(c => col(c) === -1)) return null;
+
+    const sections = {};
+    const order = [];
+
+    for (let i = 1; i < lines.length; i++) {
+      const cells = splitCSV(lines[i]);
+      const sec = (cells[col('seccao')] || '').toLowerCase().trim();
+      if (!sec) continue;
+
+      if (!sections[sec]) {
+        sections[sec] = {
+          id: sec,
+          nome: { pt: cells[col('nome_pt')] || sec, en: cells[col('nome_en')] || sec, fr: cells[col('nome_fr')] || sec },
+          tipo: { pt: cells[col('tipo_pt')] || '', en: cells[col('tipo_en')] || '', fr: cells[col('tipo_fr')] || '' },
+          pratos: [],
+        };
+        order.push(sec);
+      }
+
+      sections[sec].pratos.push({
+        nome:      { pt: cells[col('prato_pt')] || '', en: cells[col('prato_en')] || cells[col('prato_pt')] || '', fr: cells[col('prato_fr')] || cells[col('prato_pt')] || '' },
+        descricao: { pt: cells[col('desc_pt')]  || '', en: cells[col('desc_en')]  || cells[col('desc_pt')]  || '', fr: cells[col('desc_fr')]  || cells[col('desc_pt')]  || '' },
+        alergénios: cells[col('alergénios')] || cells[col('alerg')] || '',
+        preco: cells[col('preco')] || '',
+      });
+    }
+
+    return order.length ? order.map(k => sections[k]) : null;
+  }
+
+  function splitCSV(line) {
+    const result = []; let cur = '', inQ = false;
+    for (const c of line) {
+      if (c === '"') { inQ = !inQ; }
+      else if (c === ',' && !inQ) { result.push(cur.trim()); cur = ''; }
+      else { cur += c; }
+    }
+    result.push(cur.trim());
+    return result;
+  }
+
+  // ── QR CODE ──
+  function generateQR() {
+    const url = window.location.origin + window.location.pathname;
+    try {
+      new QRCode(document.getElementById('qr-code'), {
+        text: url,
+        width: 140,
+        height: 140,
+        colorDark: '#0D1E24',
+        colorLight: '#F0EAE0',
+        correctLevel: QRCode.CorrectLevel.M,
+      });
+    } catch (e) {
+      document.getElementById('qr-code').innerHTML = `<p style="font-size:0.7rem;color:var(--mist);padding:1rem;">${url}</p>`;
+    }
+  }
+
+  // ── INIT ──
+  async function init() {
+    generateQR();
+
+    try {
+      const res  = await fetch(CSV_URL);
+      const text = await res.text();
+      const data = parseCSV(text);
+      if (data && data.length) { menuData = data; renderMenu(data); return; }
+    } catch (_) {}
+
+    menuData = fallback;
+    renderMenu(fallback);
+  }
+
+  init();
+</script>
+</body>
+</html>
