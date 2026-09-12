@@ -306,7 +306,7 @@
   };
 
   // ── GOOGLE SHEETS ──
-  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTccWnTLoa8CDsgEb0BPJSLeZ43C1Xzff889ba-g3oWeeO3gM07Uvidgy5WxOERqvhhaP4HyGXb7BAW/pub?gid=63461864&single=true&output=csv';
+  const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTccWnTLoa8CDsgEb0BPJSLeZ43C1Xzff889ba-g3oWeeO3gM07Uvidgy5WxOERqvhhaP4HyGXb7BAW/pub?gid=0&single=true&output=csv';
 
   // Fallback com traduções
   const fallback = [
@@ -512,7 +512,7 @@
     generateQR();
 
     try {
-      const res  = await fetch(CSV_URL);
+      const res  = await fetch(CSV_URL + '&t=' + Date.now(), { cache: 'no-store' });
       const text = await res.text();
       const data = parseCSV(text);
       if (data && data.length) { menuData = data; renderMenu(data); return; }
