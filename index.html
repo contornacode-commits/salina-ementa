@@ -437,9 +437,7 @@
   }
 
   // ── PARSE CSV DO GOOGLE SHEETS ──
-  // Colunas esperadas na aba "ementa":
-  // seccao | nome_pt | nome_en | nome_fr | tipo_pt | tipo_en | tipo_fr |
-  // prato_pt | prato_en | prato_fr | desc_pt | desc_en | desc_fr | alergénios | preco
+  // Aceita o formato do site: seccao | tipo_pt/en/fr | nome_pt/en/fr | descricao_pt/en/fr | alergénios | preco
   function parseCSV(text) {
     const lines = text.trim().split('\n').map(l => l.trim()).filter(Boolean);
     if (lines.length < 2) return null;
@@ -447,32 +445,42 @@
     const header = lines[0].replace(/^﻿/, '').split(',').map(h => h.trim().toLowerCase());
     const col = name => header.indexOf(name);
 
-    const required = ['seccao', 'prato_pt', 'desc_pt', 'preco'];
-    if (required.some(c => col(c) === -1)) return null;
+    // aceita nome_pt (formato site) ou prato_pt (formato antigo)
+    const colNome = name => col('prato_' + name) !== -1 ? col('prato_' + name) : col('nome_' + name);
+    const colDesc = name => col('desc_' + name) !== -1 ? col('desc_' + name) : col('descricao_' + name);
+
+    if (col('preco') === -1 || colNome('pt') === -1) return null;
 
     const sections = {};
     const order = [];
 
     for (let i = 1; i < lines.length; i++) {
       const cells = splitCSV(lines[i]);
-      const sec = (cells[col('seccao')] || '').toLowerCase().trim();
-      if (!sec) continue;
 
-      if (!sections[sec]) {
-        sections[sec] = {
-          id: sec,
-          nome: { pt: cells[col('nome_pt')] || sec, en: cells[col('nome_en')] || sec, fr: cells[col('nome_fr')] || sec },
-          tipo: { pt: cells[col('tipo_pt')] || '', en: cells[col('tipo_en')] || '', fr: cells[col('tipo_fr')] || '' },
+      // grupo: usa tipo_pt se seccao for literal "seccao" ou vazio
+      const rawSec = (cells[col('seccao')] || '').trim();
+      const secKey = (rawSec === '' || rawSec.toLowerCase() === 'seccao')
+        ? (cells[col('tipo_pt')] || rawSec).toLowerCase().trim()
+        : rawSec.toLowerCase().trim();
+      if (!secKey) continue;
+
+      if (!sections[secKey]) {
+        const tipoVal = c => cells[col('tipo_' + c)] || '';
+        sections[secKey] = {
+          id: secKey,
+          nome: { pt: tipoVal('pt') || secKey, en: tipoVal('en') || secKey, fr: tipoVal('fr') || secKey },
+          tipo: { pt: tipoVal('pt'), en: tipoVal('en'), fr: tipoVal('fr') },
           pratos: [],
         };
-        order.push(sec);
+        order.push(secKey);
       }
 
-      sections[sec].pratos.push({
-        nome:      { pt: cells[col('prato_pt')] || '', en: cells[col('prato_en')] || cells[col('prato_pt')] || '', fr: cells[col('prato_fr')] || cells[col('prato_pt')] || '' },
-        descricao: { pt: cells[col('desc_pt')]  || '', en: cells[col('desc_en')]  || cells[col('desc_pt')]  || '', fr: cells[col('desc_fr')]  || cells[col('desc_pt')]  || '' },
+      const v = (fn, l) => cells[fn(l)] || '';
+      sections[secKey].pratos.push({
+        nome:       { pt: v(colNome,'pt'), en: v(colNome,'en') || v(colNome,'pt'), fr: v(colNome,'fr') || v(colNome,'pt') },
+        descricao:  { pt: v(colDesc,'pt'), en: v(colDesc,'en') || v(colDesc,'pt'), fr: v(colDesc,'fr') || v(colDesc,'pt') },
         alergénios: cells[col('alergénios')] || cells[col('alerg')] || '',
-        preco: cells[col('preco')] || '',
+        preco:      cells[col('preco')] || '',
       });
     }
 
